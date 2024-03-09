@@ -1,0 +1,108 @@
+// NOTES: **********************************
+//*****************************************
+// variables
+// directly put values (compile to actual value) in case of scss
+//maps
+//nesting
+//_partials
+//@function
+// @mixin
+
+////////////////////////////////////////////////////////////////////////////
+///
+
+//partials
+@import "./resets";
+@import "./variables";
+
+//function
+@function weight($weight-name) {
+  @return map-get($font-weight, $weight-name);
+}
+//mixin
+@mixin flexCenter($direction) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: $direction;
+}
+
+@mixin theme($light-theme: true) {
+  @if $light-theme {
+    background: lighten($main-color, 100%);
+    color: darken($favourite-color, 100%);
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}
+
+///
+:root {
+  --primary-color: gray;
+  --text-color: white;
+  //compatibility is 90% only
+}
+
+//in the variables partial
+// //scss variable -c-> 100%;
+// $favourite-color: green;
+// $main-color: purple;
+// /// MAPS (key-value pair)
+// $font-weight: (
+//   "regular": 400,
+//   "medium": 500,
+//   "bold": 700,
+// );
+
+//// nesting
+.main {
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  //instead of this i can use mixins
+
+  @include flexCenter(row);
+  @include mobile {
+    flex-direction: column;
+    color: red;
+  }
+
+  background: $main-color;
+  width: 80%-20%;
+  margin: 0 auto;
+  //nesting (do not do over nesting)
+  #{&}-paragraph1 {
+    // font-weight: map-get($font-weight, bold);
+    font-weight: weight(bold);
+    &:hover {
+      color: black;
+    }
+  }
+
+  /// extends
+
+  #{&}-paragraph2 {
+    @extend .main-paragraph1;
+
+    &:hover {
+      color: greenyellow;
+    }
+  }
+}
+
+//
+
+///
+body {
+  // background: var(--primary-color);
+  background: $main-color;
+  color: $favourite-color;
+}
+
+.light {
+  @include theme($light-theme: false);
+}
